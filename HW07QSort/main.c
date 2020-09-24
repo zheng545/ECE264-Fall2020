@@ -15,7 +15,10 @@ int main(int argc, char * * argv)
   // argv[2]: name of output file
 
   // if argc is not 3, return EXIT_FAILURE
-
+  if (argc != 3)
+    {
+      return EXIT_FAILURE;
+    }
   // count the number of integers in the file
   int numElem = 0;
   numElem = countInt(argv[1]);
@@ -30,31 +33,33 @@ int main(int argc, char * * argv)
   // 2. allocate memory
   // 3. check whether allocation succeed
   //    if allocation fails, return EXIT_FAILURE
-
-  int * intArr;
-
+  int * intArr = malloc(sizeof(* intArr) * (numElem+1));
+  if(!intArr)
+   {
+      printf("Could not allocate memory.\n");
+      return EXIT_FAILURE;
+   }
   bool rtv = readInt(argv[1], intArr, numElem);
-
-  if (rtv == false) //if read fails, return EXIT_FAILURE
+  //if read fails, return EXIT_FAILURE
+  if (rtv == false) 
     { 
-
+      return EXIT_FAILURE;
     }
   
   // call qsort using the comparison function you write
-  qsort(....);
+  qsort(intArr, numElem, sizeof(int), compareInt);
 
   // write the sorted array to a file whose name is argv[2]
-  
   rtv = writeInt(argv[2], intArr, numElem);
   if (rtv == false) // read fail
     {
       // release memory
+      free(intArr);
       return EXIT_FAILURE;
     }
-
+    
   // everything is ok, release memory, return EXIT_SUCCESS
-
+  free(intArr);
   return EXIT_SUCCESS;
 }
 #endif
-
