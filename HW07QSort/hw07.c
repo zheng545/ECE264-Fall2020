@@ -44,28 +44,23 @@ bool readInt(char* filename, int * intArr, int size)
   {
     // if fopen fails, return false
     // Do NOT fclose }
-    printf("Could not open file %s\n", filename); 
+    // printf("Could not open file %s\n", filename); 
     return false;  
   }
-  int count = countInt(filename);
   // read integers from the file.
-  // 
-  //
-  // if the number of integers is different from size (too
-  // few or too many) return false
-  
   int inte;
-  int num = 0;
   int ind = 0;
-  
   while (fscanf(fptr,"%d",&inte) == 1)
   {
-    num ++;
     intArr[ind] = inte;
     ind ++;
   }
-  if (num != count)
+  
+  // if the number of integers is different from size (too
+  // few or too many) return false
+  if (ind != size)
   {
+    fclose(fptr);//already open successfully need to close
     return false;
   }
   // if everything is fine, fclose and return true
