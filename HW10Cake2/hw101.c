@@ -62,17 +62,17 @@ ListNode * createList(int valn)
 // print the values of the nodes to be deleted
 void eliminate(ListNode * head, int valk)
 {
-  int count;
+  int count = 1;
   if (head == NULL){return;}
   // count from the head of linked list
   ListNode * tracker = head;
   while (head -> next != NULL)
   {
-    count = 0;
-    while (count < valk)
+    count = 1;
+    while (count != valk)
     {
-      if (tracker != NULL){count++;}
       ListNode * currentHead = tracker -> next;
+      if (tracker != NULL){count++;}
       if (count == valk)
       {
 #ifdef DEBUG
@@ -81,11 +81,11 @@ void eliminate(ListNode * head, int valk)
         ListNode * todelete = tracker;
         printListNode (todelete); 
 #endif
-        printf("%d\n",tracker -> value);
-        head = deleteNode(head,tracker);
+        printf("%d\n",todelete -> value);
+        deleteNode(head,todelete);
+        if (currentHead != NULL){tracker = currentHead;}
+        else {tracker = head;}
       }
-      if (currentHead != NULL){tracker = currentHead;}
-      else {tracker = head;}
     }
   }
   printf("%d\n",head -> value);
@@ -112,10 +112,11 @@ ListNode * deleteNode(ListNode * head, ListNode * todelete)
 {
   // new variable to start from head, keep head unchanged
   ListNode * p = head; 
+  ListNode * q = todelete; 
   if (p == NULL){return NULL;}
-  if (todelete == NULL){return head;}
+  if (q == NULL){return head;}
   // first case: deleted node at beginning of list
-  if (todelete == p)
+  if (q == p)
   {
     p = head -> next;
     free(head);
@@ -127,10 +128,10 @@ ListNode * deleteNode(ListNode * head, ListNode * todelete)
    }
   if (p != NULL)
     {
-      p -> next = todelete -> next;
-      free(todelete);
+      p -> next = q -> next;
+      free(q);
     }
-  return head;
+  return p;
 }
 #endif
 
