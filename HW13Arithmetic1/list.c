@@ -23,7 +23,24 @@
 //    return true
 bool readList(char * filename, List * arithlist)
 {
-  return true;
+  	FILE * fptr = fopen(filename, "r");
+	if (fptr == NULL)
+	{
+		return false;
+	}
+	char  word[WORDLENGTH];
+	while (fgets(word,sizeof(word),fptr) != NULL)
+  	{
+    		if (strchr(word,'\n') == NULL)
+    		{
+     			fclose(fptr);
+      			deleteList(arithlist);
+      			return false;
+    		}
+    		addNode(arithlist,word);
+	}
+	fclose(fptr);
+	return true;
 }
 #endif
 
@@ -32,7 +49,17 @@ bool readList(char * filename, List * arithlist)
 // release the memory of every node in the list
 // release the memory of the list 
 void deleteList(List * arithlist)
-{
+{	
+	if (arithlist == NULL)
+	{return;}
+	while (arithlist -> head != NULL)
+	{
+		ListNode * p = arithlist -> head -> next;
+		free (arithlist -> head);
+		arithlist -> head = p;
+	}
+	free(arithlist);
+	return;
 }
 #endif
 
@@ -50,6 +77,24 @@ void deleteList(List * arithlist)
 // insert the ListNode to the list
 void addNode(List * arithlist, char * word)
 {
+	if (arithlist == NULL)
+	{return;}
+	ListNode * q = malloc(sizeof(ListNode));
+	strcpy(q -> word, word);
+	q -> prev = NULL;
+	q -> next = NULL;
+	if (arithlist -> head == NULL)
+	{
+		arithlist -> head = q;
+		arithlist -> tail = q;
+	}
+	else
+	{
+		q -> prev = arithlist -> tail;
+		arithlist -> tail -> next = q;
+		arithlist -> tail = q;
+	}
+	return;
 }
 #endif
 
@@ -69,7 +114,43 @@ void addNode(List * arithlist, char * word)
 // Be careful about delete the first or the last node
 bool deleteNode(List * arithlist, ListNode * ln)
 {
-  return true;
+	if (arithlist == NULL)
+	{return false;}
+	if (arithlist -> head == NULL && arithlist -> tail == NULL)
+	{return false;}
+	ListNode * h = arithlist -> head;
+	//ListNode * t = arithlist -> tail;
+	while ((h != NULL) && (h != ln)){h = h -> next;}//new
+	if (h == NULL){return false;} //#####new add
+	if (ln == arithlist -> head)
+	{	
+		ListNode * r = arithlist -> head -> next;
+    	if (r != NULL)
+    	{
+      		r -> prev = NULL;
+    	}
+		free (arithlist -> head);
+		arithlist -> head = r;
+		if (arithlist -> head == NULL){arithlist -> tail = NULL;}
+		return true;
+	}
+	//edit !!!!!!
+	else if (ln == arithlist -> tail)
+	{
+		ListNode * r = arithlist -> tail -> prev;
+    	if (r != NULL)
+    	{
+      		r -> next = NULL;
+    	}
+		free (arithlist -> tail);
+		arithlist -> tail = r;
+		if (arithlist -> tail == NULL){arithlist -> head = NULL;}
+		return true;
+	}
+	h -> next -> prev = h -> prev;
+  	h -> prev -> next = h -> next;
+  	free(h);
+  	return true;
 }
 #endif
 

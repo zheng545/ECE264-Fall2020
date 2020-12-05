@@ -4,6 +4,7 @@
 
 #include "sort.h"
 #include <stdio.h>
+void swap(int*,int*);
 
 // DO NOT MODIFY THIS FUNCTION
 bool checkOrder(int * arr, int size)
@@ -27,19 +28,32 @@ bool checkOrder(int * arr, int size)
 #ifdef TEST_SORT
 void ssort(int * arr, int size)
 {
-  // This function has two levels of for
-  // The first level specifies which element in the array
-  // The second level finds the smallest element among the unsorted
-  // elements
+  int i; //in the first level of for to specify which element in array
+  int j; //in the second level of for to find the smallest element	
+  int min; //the flag minimum value used to compared 
+  
+  for (i = 0; i < size - 1; i++)
+  {
+    min = i; 	//set the first element in unsorted array as the flag
+    for (j = i + 1; j < size; j++)
+    {
+      if (arr[j] < arr[min])
+          min = j;	//find the smallest element in array
+    } 
+    if (i != min)	//swap the smallest element to the first place
+       swap(&arr[i], &arr[min]);
+   } 
+   
+   return;
+}
 
-  // This is the syntax to read or write an array element:
-  // int x = arr[4];
-  // read the value of arr[4] and store it in x
-  // arr[4] = 5;
-  // stores 5 in the element arr[4]
-  // Please remember that indexes start from 0.
+void swap(int* num1, int* num2) 
+{
+   int hold;
+   hold = *num1; 
+   *num1 = *num2; 
+   *num2 = hold;
 
-  // After finding the smallest element among the unsorted elements,
-  // swap it with the element of the index from the first level
+   return; 
 }
 #endif

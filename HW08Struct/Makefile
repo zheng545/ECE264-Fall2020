@@ -3,7 +3,7 @@ ERROR = -Wvla -Werror
 GCC = gcc -std=c99 -g $(WARNING) $(ERROR)
 VAL = valgrind --tool=memcheck --log-file=memcheck.txt --leak-check=full --verbose
 
-TESTFALGS = -DTEST_MAIN -DTEST_COUNTVECTOR -DTEST_READVECTOR -DTEST_WRITEVECTOR -DTEST_COMPAREVECTOR
+TESTFALGS = -DTEST_MAIN -DTEST_COUNTVECTOR -DTEST_READVECTOR -DTEST_WRITEVECTOR -DTEST_COMPAREVECTOR 
 
 SRCS = hw08.c main.c 
 OBJS = $(SRCS:%.c=%.o)
@@ -17,11 +17,11 @@ hw08: $(OBJS)
 testmemory: hw08
 	$(VAL) ./hw08
 
-testall: test1 test2 test3 test4
+testall: test1 test2 test3 test4 test5
 
 test1: hw08
 	./hw08 inputs/test1.bin output1.bin
-	diff output1.bin expected/expected1.bin
+	diff -a output1.bin expected/expected1.bin
 
 test2: hw08
 	./hw08 inputs/test2.bin output2.bin
@@ -35,6 +35,9 @@ test4: hw08
 	./hw08 inputs/test4.bin output4.bin
 	diff output4.bin expected/expected4.bin
 
+test5: hw08
+	./hw08 inputs/test5.bin output5.bin
+	diff output5.bin expected/expected5.bin
 clean: # remove all machine generated files
 	rm -f hw08 *.o output?
 

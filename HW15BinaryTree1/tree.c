@@ -60,8 +60,44 @@ void preOrder(Tree * tr, char * filename)
 #ifdef TEST_BUILDTREE
 // Consider the algorithm posted on
 // https://www.geeksforgeeks.org/construct-a-binary-tree-from-postorder-and-inorder/
+TreeNode * helper(int * inArray, int * postArray, int inStart, int inEnd, int *postIndex)
+{
+  if (inStart > inEnd){return NULL;}
+
+  // find the root based on postArray
+  int root = postArray[*postIndex];
+  (*postIndex)--; 
+
+  TreeNode * tn = malloc(sizeof(TreeNode));
+  tn -> left = NULL;
+  tn -> right = NULL;
+  tn -> value = root;
+
+  /* If this node has no children then return */
+  if (inStart == inEnd){return tn;}
+
+  // find the index of root in inArray
+  int inIndex;
+  for (int x = inStart; x <= inEnd; x++)
+  {
+    if (inArray[x] == root)
+    {
+      inIndex = x;
+    }
+  }
+
+  /* Using index in Inorder traversal, construct left and right subtress */
+  tn -> right = helper(inArray, postArray, inIndex + 1, inEnd, postIndex); 
+  tn -> left = helper(inArray, postArray, inStart, inIndex - 1, postIndex); 
+  
+  return tn; 
+}
 
 Tree * buildTree(int * inArray, int * postArray, int size)
 {
+  int Index = size - 1; 
+  Tree * tr = malloc(sizeof(Tree));
+  tr -> root = helper(inArray, postArray, 0, size - 1, &Index); 
+  return tr;
 }
 #endif
